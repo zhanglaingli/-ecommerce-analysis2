@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>电商商业数据分析 · 数据采集方案</title>
+<style>
+  :root{--bg:#fff;--panel:#f6f8fa;--line:#e5e7eb;--text:#1f2937;--muted:#6b7280;--brand:#2563eb;--brand-soft:#eff6ff;--accent:#0f766e;--warn:#b45309;--warn-soft:#fffbeb}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,sans-serif;background:var(--bg);color:var(--text);line-height:1.75;max-width:900px;margin:0 auto;padding:48px 28px 64px}
+  header{border-bottom:2px solid var(--line);padding-bottom:18px;margin-bottom:28px}
+  h1{font-size:25px;letter-spacing:.5px;margin-bottom:6px}
+  .tagline{color:var(--muted);font-size:14px}
+  h2{font-size:18px;margin:32px 0 12px;padding-left:10px;border-left:4px solid var(--brand)}
+  h3{font-size:15px;color:var(--accent);margin:14px 0 6px}
+  p,li{font-size:14.5px;color:#374151}
+  ul{margin:8px 0 8px 4px;list-style:none}
+  li{position:relative;padding-left:18px;margin-bottom:6px}
+  li::before{content:"";position:absolute;left:2px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--brand)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:10px 0}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:var(--brand-soft);color:var(--brand);font-weight:600}
+  tr:nth-child(even) td{background:#fafbfc}
+  pre{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:16px 18px;overflow:auto;font-size:12.5px;line-height:1.6;margin:12px 0;font-family:"SF Mono",Consolas,Menlo,monospace}
+  code{background:var(--panel);padding:1px 6px;border-radius:5px;font-size:12.5px;font-family:Consolas,Menlo,monospace}
+  .warn{background:var(--warn-soft);border:1px solid #fde68a;border-radius:10px;padding:12px 16px;margin:12px 0;color:#92400e;font-size:14px}
+  .tip{background:var(--brand-soft);border:1px solid #cfe0ff;border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14px}
+  .meta{font-size:13px;color:var(--muted);margin-top:26px;border-top:1px dashed var(--line);padding-top:14px}
+</style>
+</head>
+<body>
+<header>
+  <h1>电商商业数据分析 · 数据采集方案</h1>
+  <div class="tagline">大数据技术专业 · 求职项目 | 面向学生调试的采集思路与代码框架</div>
+</header>
+
+<!-- 1. 公开数据源推荐 -->
+<h2>一、推荐可采集的公开数据源</h2>
+<p>学生项目<b>优先选择"官方授权下载型"数据源</b>，既合法又可获得结构化数据；仅在练习爬虫技术时，才对低风险公开页面做少量抓取。</p>
+<table>
+  <tr><th>数据源</th><th>类型</th><th>适合采集的内容</th><th>建议用法</th></tr>
+  <tr><td><b>阿里天池数据集</b><br>tianchi.aliyun.com/dataset</td><td>官方授权下载</td><td>淘宝/天猫用户行为、电商销量、商品类目等结构化数据集</td><td><b>首选</b>。直接下载 CSV，省去爬虫，数据真实可靠</td></tr>
+  <tr><td><b>Kaggle 电商数据集</b><br>（Online Retail / Olist 巴西电商）</td><td>开源数据集</td><td>真实订单、地理、评分、付款方式等</td><td>练手分析；Olist 含地域与评价，贴近本项目字段</td></tr>
+  <tr><td><b>国家数据平台</b><br>data.stats.gov.cn</td><td>政府开放</td><td>社零总额、网上零售额等宏观指标</td><td>作项目背景与行业对比，非明细</td></tr>
+  <tr><td><b>地方公共数据开放平台</b><br>（如成都公共数据开放平台）</td><td>政府开放</td><td>本地消费、物流、电商相关统计</td><td>贴合"川渝求职"主题，增强地域相关性</td></tr>
+  <tr><td>公开榜单/比价页<br>（如什么值得买、慢慢买）</td><td>网页抓取（练习）</td><td>商品标题、价格、销量榜单</td><td><b>仅用于练爬虫</b>，抓取前看 robots 且低频</td></tr>
+</table>
+<div class="warn"><b>不建议</b>直接爬取淘宝/京东/拼多多等商业平台：其用户协议明确禁止抓取，且有反爬与登录墙，存在法律与封号风险。用天池/开放平台的等价数据替代即可满足简历项目需求。</div>
+
+<!-- 2. 字段清单 -->
+<h2>二、需要采集的字段清单</h2>
+<p>围绕"订单—用户—商品—地域"四要素设计，采集阶段<b>统一先按字符串入库</b>，清洗阶段再转类型，避免解析失败丢数据。</p>
+<table>
+  <tr><th>字段</th><th>类型</th><th>说明 / 来源</th><th>分析用途</th></tr>
+  <tr><td>order_id</td><td>字符串</td><td>订单唯一标识</td><td>去重、交易计数</td></tr>
+  <tr><td>user_id</td><td>字符串（脱敏）</td><td>用户标识，务必匿名化</td><td>RFM 用户分层</td></tr>
+  <tr><td>product_id / title</td><td>字符串</td><td>商品编号与名称</td><td>品类、关联分析</td></tr>
+  <tr><td>category</td><td>字符串</td><td>商品一级/二级类目</td><td>类目销售结构</td></tr>
+  <tr><td>price / quantity / amount</td><td>数值</td><td>单价、数量、金额</td><td>销售额、客单价</td></tr>
+  <tr><td>order_time</td><td>时间</td><td>下单时间戳</td><td>趋势、季节性</td></tr>
+  <tr><td>province / city</td><td>字符串</td><td>收货地域</td><td>地域分布、物流</td></tr>
+  <tr><td>payment_method</td><td>字符串</td><td>支付方式</td><td>支付偏好</td></tr>
+  <tr><td>is_return</td><td>布尔</td><td>是否退货</td><td>退货率分析</td></tr>
+  <tr><td>rating（可选）</td><td>数值</td><td>商品评价分</td><td>质量/满意度</td></tr>
+</table>
+
+<!-- 3. 代码框架 -->
+<h2>三、Python requests + bs4 采集代码框架（思路演示）</h2>
+<div class="tip">下面是一套<b>骨架</b>：函数职责清晰、关键步骤用注释标出，<code>TODO</code> 处需要你结合实际网页的 HTML 结构自己补全选择器并调试。<b>不是开箱即用的成品</b>，目的是让你理解"请求→解析→汇总"的链路。</div>
+
+<pre><code># -*- coding: utf-8 -*-
+# 电商公开榜单页采集框架（思路演示，需自行补全选择器与异常处理）
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+import time
+import random
+
+# ── 1) 请求头：声明身份 + 模拟浏览器，避免被误判为恶意爬虫 ──
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) ...",  # 用你本机浏览器的真实 UA
+    "Accept-Language": "zh-CN,zh;q=0.9",
+    # 练习时建议在 UA 末尾注明联系方式，例如 "...; +your_email@example.com"
+}
+
+def fetch_page(url, params=None):
+    """获取单页 HTML：思路 = 带超时 + 重试 + 频率控制"""
+    for attempt in range(3):               # TODO: 失败最多重试 3 次
+        try:
+            resp = requests.get(url, headers=HEADERS, params=params, timeout=10)
+            resp.encoding = resp.apparent_encoding   # 防中文乱码
+            if resp.status_code == 200:
+                return resp.text
+        except requests.RequestException as e:
+            print("请求失败:", e)
+        time.sleep(random.uniform(1, 3))   # TODO: 每次请求间隔 1~3 秒，控制频率
+    return None
+
+def parse_items(html):
+    """用 bs4 解析：思路 = 先定位列表容器，再逐条提取字段"""
+    soup = BeautifulSoup(html, "html.parser")
+    items = []
+    # TODO: 用 soup.select("列表容器选择器") 找到每条商品的节点
+    nodes = soup.select("REPLACE_WITH_LIST_SELECTOR")   # ← 替换为真实 CSS 选择器
+    for node in nodes:
+        row = {
+            "product_id": "",   # TODO: node.select_one("...").get_text(strip=True)
+            "title":      "",   # TODO: 商品标题
+            "price":      "",   # TODO: 价格（先存字符串，清洗再转数值）
+            "sales":      "",   # TODO: 销量/热度
+            # ...其余字段按"字段清单"补充
+        }
+        items.append(row)
+    return items
+
+def crawl(pages=5):
+    """主流程：构造 URL → 翻页 → 采集 → 汇总"""
+    all_items = []
+    for page in range(1, pages + 1):
+        # TODO: 构造带翻页参数的 URL，例如 url = base + f"?page={page}"
+        html = fetch_page("REPLACE_WITH_TARGET_URL")
+        if not html:
+            continue
+        all_items.extend(parse_items(html))
+    return all_items
+
+if __name__ == "__main__":
+    data = crawl(pages=5)
+    print(f"共采集 {len(data)} 条")
+    # 见第五节：保存到 CSV
+    # pd.DataFrame(data).to_csv("ecommerce_raw.csv", index=False, encoding="utf-8-sig")
+</code></pre>
+<div class="card">
+  <h3>调试顺序建议</h3>
+  <p>①先用 <code>print(resp.text[:500])</code> 确认能拿到 HTML；②在浏览器"检查"里复制目标节点的 CSS 选择器，填进 <code>soup.select()</code>；③单条 <code>parse_items</code> 跑通后再加翻页；④最后接 CSV 存储。每一步小步验证，比一次性写完整脚本更容易排错。</p>
+</div>
+
+<!-- 4. 爬虫规范 -->
+<h2>四、采集时注意的爬虫规范（合规与法律风险）</h2>
+<ul>
+  <li><b>先看 robots.txt：</b>访问目标站 <code>域名/robots.txt</code>，遵守 <code>Disallow</code> 路径，不抓取禁止收录的页面。</li>
+  <li><b>控制频率：</b>请求间隔 1~3 秒（加随机抖动），单站 QPS 保持低位，避开业务高峰；绝不做高并发压测式抓取，否则可能构成对服务器的不当负担甚至侵权。</li>
+  <li><b>声明身份：</b>使用真实 <code>User-Agent</code>，练习项目可在 UA 或请求头注明联系方式，便于站方联系。</li>
+  <li><b>不越权：</b>不绕过登录、验证码、付费墙；登录后才能看到的数据不属于公开采集范围。</li>
+  <li><b>不碰个人信息：</b>不采集姓名、手机号、地址等可识别个人的信息（PII），<b>《个人信息保护法》</b>对此有严格约束；用户 ID 必须脱敏处理。</li>
+  <li><b>数据用途合规：</b>仅用于学习研究，不商用、不转售、不公开原始明细；涉及《数据安全法》的场景需谨慎。</li>
+  <li><b>尊重平台协议：</b>商业电商平台的用户协议多禁止爬取，优先用官方开放数据（天池/政府开放平台）替代，从根本上规避风险。</li>
+</ul>
+
+<!-- 5. 存储方案 -->
+<h2>五、数据存储方案：保存为 CSV</h2>
+<p>学生项目用 CSV 最轻量、Excel/Python 都能直接打开，无需搭建数据库。建议<b>原始层与清洗层分离</b>。</p>
+<pre><code># 原始数据：保留采集原貌，全部先当字符串，编码用 utf-8-sig 防 Excel 中文乱码
+df_raw = pd.DataFrame(data)
+df_raw.to_csv("data/ecommerce_raw.csv", index=False, encoding="utf-8-sig")
+
+# 增量采集：先读已有文件去重，再追加，避免重复跑丢数据
+# if os.path.exists(path): df_old = pd.read_csv(path); df = pd.concat([df_old, df_new]).drop_duplicates("order_id")
+</code></pre>
+<div class="card">
+  <h3>目录建议</h3>
+  <p><code>data/raw/</code> 放原始 CSV，<code>data/clean/</code> 放清洗后 CSV，<code>scripts/</code> 放采集与清洗脚本。这种"原始—清洗"分层结构在简历里很加分，体现工程规范意识。</p>
+</div>
+
+<div class="meta">
+  本文为思路与框架文档，非成品脚本。配套上一版《项目方案》可形成"采集→分析"完整叙事。下一步建议：先在天池/Kaggle 取一份真实电商数据集跑通分析，再把本节爬虫框架作为"附加技术练习"写入简历。
+</div>
+</body>
+</html>

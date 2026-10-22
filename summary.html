@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>电商商业数据分析 · 项目总结</title>
+<style>
+  :root{--bg:#fff;--panel:#f6f8fa;--line:#e5e7eb;--text:#1f2937;--muted:#6b7280;--brand:#2563eb;--brand-soft:#eff6ff;--accent:#0f766e}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,sans-serif;background:var(--bg);color:var(--text);line-height:1.75;max-width:900px;margin:0 auto;padding:48px 28px 64px}
+  header{border-bottom:2px solid var(--line);padding-bottom:18px;margin-bottom:28px}
+  h1{font-size:25px;letter-spacing:.5px;margin-bottom:6px}
+  .tagline{color:var(--muted);font-size:14px}
+  h2{font-size:18px;margin:32px 0 12px;padding-left:10px;border-left:4px solid var(--brand)}
+  p,li{font-size:14.5px;color:#374151}
+  ul{margin:8px 0 8px 4px;list-style:none}
+  li{position:relative;padding-left:18px;margin-bottom:6px}
+  li::before{content:"";position:absolute;left:2px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--brand)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px}
+  th,td{border:1px solid var(--line);padding:9px 10px;text-align:left;vertical-align:top}
+  th{background:var(--brand-soft);color:var(--brand);font-weight:600}
+  tr:nth-child(even) td{background:#fafbfc}
+  code{background:var(--panel);padding:1px 6px;border-radius:5px;font-size:12.5px;font-family:Consolas,Menlo,monospace}
+  .kpis{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}
+  .kpi{flex:1;min-width:140px;background:var(--brand-soft);border:1px solid #cfe0ff;border-radius:12px;padding:14px}
+  .kpi .n{font-size:20px;font-weight:700;color:var(--brand)}
+  .kpi .l{font-size:12px;color:var(--muted);margin-top:4px}
+  .btn{display:inline-block;margin-top:10px;background:var(--brand);color:#fff;padding:10px 18px;border-radius:10px;text-decoration:none;font-size:14px}
+  .btn:hover{opacity:.9}
+  .flow{display:flex;flex-wrap:wrap;gap:0;margin:14px 0}
+  .node{flex:1 1 150px;min-width:130px;background:var(--brand-soft);border:1px solid #cfe0ff;border-radius:10px;padding:12px;text-align:center;font-size:13px;color:var(--brand)}
+  .arrow{flex:0 0 24px;display:flex;align-items:center;justify-content:center;color:var(--brand);font-size:16px}
+  .meta{font-size:13px;color:var(--muted);margin-top:26px;border-top:1px dashed var(--line);padding-top:14px}
+  @media(max-width:600px){.arrow{flex:0 0 100%;transform:rotate(90deg);height:20px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>电商商业数据分析 · 项目总结</h1>
+  <div class="tagline">大数据技术专业 · 求职作品集 | 采集 → 清洗 → 分析 → 可视化 端到端流水线</div>
+</header>
+
+<div class="kpis">
+  <div class="kpi"><div class="n">99,441</div><div class="l">订单（清洗后）</div></div>
+  <div class="kpi"><div class="n">96,096</div><div class="l">客户（RFM 视角）</div></div>
+  <div class="kpi"><div class="n">R$ 16.0M</div><div class="l">总销售额</div></div>
+  <div class="kpi"><div class="n">93.2%</div><div class="l">交付准时率</div></div>
+</div>
+
+<h2>一、项目简介</h2>
+<p>基于 Kaggle 公开数据集（Olist 巴西电商），搭建从数据采集、清洗、分析到可视化的端到端数据分析流水线，模拟企业"用数据驱动增长"的工作流，输出销售趋势、用户价值分层、类目结构、地域分布与交付质量等决策洞察。全程使用公开授权数据，规避直接爬取商业平台的法律与合规风险。</p>
+
+<h2>二、技术栈</h2>
+<table>
+  <tr><th>环节</th><th>工具</th><th>说明</th></tr>
+  <tr><td>数据采集</td><td>kagglehub</td><td>匿名下载公开数据集，无需账号/付费</td></tr>
+  <tr><td>数据处理</td><td>pandas / numpy</td><td>清洗、聚合、特征工程</td></tr>
+  <tr><td>可视化</td><td>ECharts</td><td>交互看板，可嵌入网页</td></tr>
+  <tr><td>工程规范</td><td>分层目录</td><td>原始层 / 清洗层 / 分析层 分离</td></tr>
+</table>
+
+<h2>三、流程架构</h2>
+<div class="flow">
+  <div class="node">数据采集<br>kagglehub</div><div class="arrow">→</div>
+  <div class="node">数据清洗<br>订单宽表</div><div class="arrow">→</div>
+  <div class="node">探索分析<br>EDA</div><div class="arrow">→</div>
+  <div class="node">数据分析<br>RFM/趋势/类目<br>地域/交付</div><div class="arrow">→</div>
+  <div class="node">可视化<br>ECharts 看板</div>
+</div>
+
+<h2>四、核心分析结论</h2>
+<table>
+  <tr><th>问题</th><th>结论</th></tr>
+  <tr><td>A1 销售趋势</td><td>2016-09~2018-10，总销售额 R$ 16,008,872，订单 99,441</td></tr>
+  <tr><td>A2 RFM 分群</td><td>客户 96,096；重要价值 15,376，流失风险 15,293，五群较均衡</td></tr>
+  <tr><td>A3 类目结构</td><td>Top3：health_beauty、watches_gifts、bed_bath_table</td></tr>
+  <tr><td>A4 地域分布</td><td>集中于东南沿海：SP / RJ / MG</td></tr>
+  <tr><td>A5 交付质量</td><td>准时率 93.2%，迟到 6.8%，取消/不可用 1,234 单</td></tr>
+</table>
+
+<h2>四·b 探索性分析（EDA）与延迟×评分热力图</h2>
+<div class="card">
+  <p>在清洗宽表基础上做了 <code>describe()</code> 描述统计与 6 个维度分组统计（支付方式 / 评分 / 州 / 品类 / 月度 / 延迟×评分），全部结论与 CSV 见 <code>data/eda/eda_report.md</code>。其中<strong>延迟×评分交叉热力图</strong>揭示：严重迟到(&gt;7天)订单 <b>77.1%</b> 给低分(≤2)，直接验证"物流差 → 差评"，是 EDA 中最具行动价值的发现。</p>
+  <a class="btn" href="data/eda/delay_review_heatmap.html" target="_blank">打开延迟×评分热力图 →</a>
+</div>
+
+<h2>五、交互看板</h2>
+<div class="card">
+  <p>完整 5 个分析的交互图表（销售趋势、RFM 分群、类目 Top10、地域 Top10、交付准时率）已生成独立看板，点击下方按钮在浏览器中查看：</p>
+  <a class="btn" href="data/analysis/dashboard.html" target="_blank">打开 ECharts 看板 →</a>
+</div>
+
+<h2>六、快速复现</h2>
+<p><code>pip install kagglehub pandas</code> → 依次运行 <code>scripts/download_olist.py</code>、<code>clean_olist.py</code>、<code>analyze_olist.py</code>、<code>eda_olist.py</code>（含品类本地化 <code>localize_categories.py</code>）。</p>
+
+<h2>七、局限性与声明</h2>
+<ul>
+  <li>数据来自巴西市场，结论不能直接套用于国内电商，但分析框架可平移；</li>
+  <li>样本约 25 个月，预测性结论置信度有限；</li>
+  <li>Olist 无显式退货字段，未成交率以订单状态近似；</li>
+  <li>数据集 © Olist，基于 CC BY-NC-SA 4.0 许可，仅用于学习研究。</li>
+</ul>
+
+<h2>八、简历话术（可直接复制）</h2>
+<div class="card">
+  <p><b>项目经验 · 电商商业数据分析</b></p>
+  <p>基于 Kaggle 公开数据集（Olist，CC BY-NC-SA 4.0），用 Python 搭建「采集 → 清洗 → EDA → 分析 → 可视化」端到端流水线；以订单为主键聚合 9 张原始表为宽表（9.9 万订单），运用 RFM 用户分层、时间序列趋势、类目/地域结构等方法输出决策洞察，并用 ECharts 搭建交互看板。关键发现：严重迟到订单 77.1% 给低分，定位物流时效为体验瓶颈。全程使用公开授权数据，规避爬虫合规风险。</p>
+  <p style="color:var(--muted);font-size:13px">技术栈：Python · pandas · numpy · ECharts · kagglehub · 数据清洗 · EDA · RFM</p>
+</div>
+
+<div class="meta">配套文档：plan.html · collection.html · README.md · EDA 报告 data/eda/eda_report.md · 延迟×评分热力图 data/eda/delay_review_heatmap.html · 代码 scripts/</div>
+</body>
+</html>

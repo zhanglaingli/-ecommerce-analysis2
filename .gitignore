@@ -1,0 +1,29 @@
+# ===== WorkBuddy 内部数据（项目记忆，不入库）=====
+.workbuddy/
+
+# ===== Python 运行/缓存 =====
+__pycache__/
+*.pyc
+.venv/
+envs/
+*.egg-info/
+
+# ===== 原始大文件数据集（含 geolocation 100万行）=====
+# 用 scripts/download_olist.py 重新下载，不入库避免仓库体积膨胀
+data/olist/
+
+# ===== 系统/编辑器 =====
+.DS_Store
+Thumbs.db
+*.tmp
+*~
+
+# ===== 日志/临时 =====
+*.log
+.cache/
+
+# ===== IDE 配置 =====
+.idea/
+
+# ===== WorkBuddy 部署临时副本（与根目录 HTML 重复，不入库）=====
+publish/

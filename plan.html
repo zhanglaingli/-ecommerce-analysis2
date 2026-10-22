@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>电商商业数据分析 · 项目方案</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#f6f8fa; --line:#e5e7eb; --text:#1f2937;
+    --muted:#6b7280; --brand:#2563eb; --brand-soft:#eff6ff; --accent:#0f766e;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,sans-serif;
+    background:var(--bg);color:var(--text);line-height:1.75;max-width:880px;margin:0 auto;padding:48px 28px 64px}
+  header{border-bottom:2px solid var(--line);padding-bottom:20px;margin-bottom:32px}
+  h1{font-size:26px;letter-spacing:.5px;margin-bottom:6px}
+  .tagline{color:var(--muted);font-size:14px}
+  h2{font-size:18px;margin:34px 0 12px;padding-left:10px;border-left:4px solid var(--brand)}
+  p,li{font-size:15px;color:#374151}
+  ul{margin:8px 0 8px 4px;list-style:none}
+  li{position:relative;padding-left:18px;margin-bottom:6px}
+  li::before{content:"";position:absolute;left:2px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--brand)}
+  .grid{display:grid;gap:10px;margin:12px 0}
+  .flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:0;margin:16px 0 8px}
+  .node{flex:1 1 140px;min-width:130px;background:var(--brand-soft);border:1px solid #cfe0ff;
+    border-radius:10px;padding:14px 12px;text-align:center;position:relative}
+  .node b{display:block;color:var(--brand);font-size:14px;margin-bottom:4px}
+  .node span{font-size:12px;color:var(--muted)}
+  .arrow{flex:0 0 26px;display:flex;align-items:center;justify-content:center;color:var(--brand);font-size:18px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:10px 0}
+  .card h3{font-size:15px;color:var(--accent);margin-bottom:6px}
+  .meta{font-size:13px;color:var(--muted);margin-top:28px;border-top:1px dashed var(--line);padding-top:14px}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:9px 10px;text-align:left}
+  th{background:var(--brand-soft);color:var(--brand);font-weight:600}
+  tr:nth-child(even) td{background:#fafbfc}
+  @media(max-width:600px){.arrow{flex:0 0 100%;transform:rotate(90deg);height:22px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>电商商业数据分析 · 项目方案</h1>
+  <div class="tagline">大数据技术专业 · 简历作品集项目 | 端到端数据分析流水线实践</div>
+</header>
+
+<!-- 1. 项目背景与业务目标 -->
+<h2>一、项目背景与业务目标</h2>
+<p>电商平台的日常运营持续产生海量交易、用户与商品数据，但原始数据分散、噪声大，难以直接支撑经营决策。本项目以一套真实结构的电商订单数据集为对象，搭建从采集到可视化的端到端数据分析流水线，模拟企业"用数据驱动增长"的典型工作流。</p>
+<p><b>业务目标：</b></p>
+<ul>
+  <li>量化销售表现与用户价值，识别高贡献客群与爆款商品；</li>
+  <li>挖掘商品关联与地域分布规律，为辅货、定价与物流策略提供依据；</li>
+  <li>定位异常与退货风险，支撑库存与运营效率优化；</li>
+  <li>沉淀一套可复用的分析流程方法论，体现工程化与业务解读双重能力。</li>
+</ul>
+
+<!-- 2. 项目整体流程架构 -->
+<h2>二、项目整体流程架构</h2>
+<div class="flow">
+  <div class="node"><b>数据采集</b><span>公开/脱敏订单数据<br>多源接入</span></div>
+  <div class="arrow">→</div>
+  <div class="node"><b>清洗与存储</b><span>缺失/异常修正<br>MySQL 落地</span></div>
+  <div class="arrow">→</div>
+  <div class="node"><b>处理 ETL</b><span>维度建模<br>指标计算</span></div>
+  <div class="arrow">→</div>
+  <div class="node"><b>分析建模</b><span>RFM / 关联<br>趋势 / 回归</span></div>
+  <div class="arrow">→</div>
+  <div class="node"><b>可视化</b><span>ECharts / BI<br>看板</span></div>
+  <div class="arrow">→</div>
+  <div class="node"><b>决策报告</b><span>结论与建议<br>业务输出</span></div>
+</div>
+<p>技术栈：<b>Python</b>（Pandas / NumPy / Scikit-learn）负责清洗与建模，<b>MySQL</b> 完成数据落地与查询，<b>ECharts / Tableau</b> 承载可视化，<b>Jupyter</b> 组织分析过程。面向更大规模可平滑迁移至 <b>Hadoop / Hive / Spark</b> 分布式方案。</p>
+
+<!-- 3. 数据源说明 -->
+<h2>三、数据源说明</h2>
+<p>采用结构贴近真实业务的电商订单数据集（公开数据集或合规脱敏样本），覆盖交易明细与基础维度，字段示例如下：</p>
+<table>
+  <tr><th>字段</th><th>说明</th><th>用途</th></tr>
+  <tr><td>订单ID / 用户ID</td><td>交易与用户唯一标识</td><td>去重、用户分层</td></tr>
+  <tr><td>商品ID / 商品类目</td><td>SKU 及所属类目</td><td>品类分析、关联规则</td></tr>
+  <tr><td>单价 / 数量 / 金额</td><td>交易金额构成</td><td>销售额、客单价</td></tr>
+  <tr><td>下单时间</td><td>交易时间戳</td><td>趋势、季节性</td></tr>
+  <tr><td>省份 / 城市</td><td>收货地域</td><td>地域分布、物流</td></tr>
+  <tr><td>支付方式 / 是否退货</td><td>交易属性与结果</td><td>转化、退货分析</td></tr>
+</table>
+<p class="card">数据量级：约 <b>数十万行</b> 订单明细，时间跨度覆盖多个完整月份，足以支撑描述性与诊断性分析，并可作为分布式扩展的压测样本。</p>
+
+<!-- 4. 项目预期分析问题 -->
+<h2>四、项目预期分析问题</h2>
+<div class="grid">
+  <div class="card">
+    <h3>1. 销售趋势与季节性</h3>
+    <p>按时间、类目拆解销售额与销量，识别高峰时段、促销活动效应与季节性波动，回答"何时、哪类商品最值得投入资源"。</p>
+  </div>
+  <div class="card">
+    <h3>2. 用户价值分层（RFM 模型）</h3>
+    <p>基于最近消费、频次、金额对用户分群，识别高价值与流失风险客群，支撑差异化运营与留存策略。</p>
+  </div>
+  <div class="card">
+    <h3>3. 商品关联与捆绑销售</h3>
+    <p>采用 Apriori 等关联规则算法挖掘购物篮组合，发现常共同购买的商品对，为捆绑定价与货架陈列提供依据。</p>
+  </div>
+  <div class="card">
+    <h3>4. 地域分布与物流优化</h3>
+    <p>分析各省份/城市的销售贡献与集中度，定位重点市场与物流压力区域，优化仓配与区域化营销。</p>
+  </div>
+  <div class="card">
+    <h3>5. 退货率与风险归因</h3>
+    <p>拆解退货率在不同类目、价格带、地域上的分布，识别高危品类与潜在影响因素，降低逆向物流损耗。</p>
+  </div>
+</div>
+
+<!-- 5. 项目局限性说明 -->
+<h2>五、项目局限性说明</h2>
+<ul>
+  <li><b>数据来源：</b>使用公开/脱敏样本，非企业真实生产数据，结论的外部有效性与业务落地需谨慎对待；</li>
+  <li><b>时间跨度：</b>样本周期有限，难以捕捉长期趋势与跨年周期，预测性结论置信度受限；</li>
+  <li><b>维度缺失：</b>缺少用户画像、营销活动标签、广告投放等字段，归因分析与因果推断存在盲区；</li>
+  <li><b>规模边界：</b>以单机中小数据量为主，未完全覆盖超大规模分布式生产环境，重在方法论而非工程极限；</li>
+  <li><b>分析层级：</b>以描述性与诊断性分析为主，预测与因果建模仅作初步探索，不作为决策唯一依据。</li>
+</ul>
+
+<div class="meta">
+  文档类型：简历 / 作品集项目描述 · 可直接引用或微调后发布。建议配合项目源码仓库（GitHub）与可视化看板截图一同展示，增强说服力。
+</div>
+</body>
+</html>
